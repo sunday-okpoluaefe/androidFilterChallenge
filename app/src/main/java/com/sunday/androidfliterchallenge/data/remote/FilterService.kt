@@ -7,6 +7,6 @@ import retrofit2.http.GET
 interface FilterService {
 
     @GET("accounts")
-    fun getFilters() : Observable<List<Filter>>
+    fun getFilters() : Observable<ArrayList<Filter>>
 
 }

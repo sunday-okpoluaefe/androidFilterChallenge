@@ -8,10 +8,10 @@ import com.sunday.androidfliterchallenge.utils.Resource
 interface FilterRepository {
 
     fun getFilters()
-    fun filtersObserver() : LiveData<Resource<List<Filter>>>
+    fun filtersObserver() : LiveData<Resource<ArrayList<Filter>>>
 
     fun getCarOwners(filter: Filter)
-    fun carOwnersObserver() : LiveData<List<CarOwner>>
+    fun carOwnersObserver() : LiveData<ArrayList<CarOwner>>
 
     fun clear()
 }

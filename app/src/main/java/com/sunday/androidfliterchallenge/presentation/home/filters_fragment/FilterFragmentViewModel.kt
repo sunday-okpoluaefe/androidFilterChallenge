@@ -7,8 +7,8 @@ import javax.inject.Inject
 
 class FilterFragmentViewModel @Inject constructor( val filterRepository: FilterRepository) : ViewModel() {
 
-    fun getFilters() = filterRepository.getFilters()
-    fun filtersObserver() = filterRepository.filtersObserver()
+    //fun getFilters() = filterRepository.getFilters()
+    //fun filtersObserver() = filterRepository.filtersObserver()
 
     fun getCarOwners(filter: Filter){
 

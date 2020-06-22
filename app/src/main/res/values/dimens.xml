@@ -4,4 +4,6 @@
     <dimen name="horizontal_margin">16dp</dimen>
     <dimen name="avatar_height">64dp</dimen>
     <dimen name="avatar_width">64dp</dimen>
+    <dimen name="large_text_size">24sp</dimen>
+    <dimen name="small_space">5dp</dimen>
 </resources>

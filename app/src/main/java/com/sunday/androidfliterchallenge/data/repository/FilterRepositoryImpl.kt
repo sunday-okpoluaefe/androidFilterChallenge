@@ -17,8 +17,8 @@ public class FilterRepositoryImpl @Inject constructor(
     val disposable: CompositeDisposable,
     val scheduler: Scheduler) : FilterRepository {
 
-    private var filters  = MutableLiveData<Resource<List<Filter>>>()
-    private var carOwners  = MutableLiveData<List<CarOwner>>()
+    private var filters  = MutableLiveData<Resource<ArrayList<Filter>>>()
+    private var carOwners  = MutableLiveData<ArrayList<CarOwner>>()
 
     override fun getFilters() {
         /* notify listeners */
@@ -33,20 +33,20 @@ public class FilterRepositoryImpl @Inject constructor(
                     filters.postValue(Resource(Status.SUCCESS, it, "success"))
                 },
                 {
-                    filters.postValue(Resource(Status.SUCCESS, null, it.message))
+                    filters.postValue(Resource(Status.ERROR, null, it.message))
                 }
             )
 
         disposable.add(dis)
     }
 
-    override fun filtersObserver(): LiveData<Resource<List<Filter>>> = filters
+    override fun filtersObserver(): LiveData<Resource<ArrayList<Filter>>> = filters
 
     override fun getCarOwners(filter: Filter) {
         TODO("Not yet implemented")
     }
 
-    override fun carOwnersObserver(): LiveData<List<CarOwner>> = carOwners
+    override fun carOwnersObserver(): LiveData<ArrayList<CarOwner>> = carOwners
 
     override fun clear() {
         disposable.clear()

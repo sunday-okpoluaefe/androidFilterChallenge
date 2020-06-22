@@ -5,6 +5,7 @@ import android.os.Parcelable
 
 class Filter() : Parcelable {
     var id : String? = ""
+    var avatar : String? = ""
     var fullName : String? = ""
     var createdAt : String? = ""
     var gender : String? = ""
