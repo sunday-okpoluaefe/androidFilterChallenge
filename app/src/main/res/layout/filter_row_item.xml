@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/white"
+    android:padding="@dimen/vertical_margin"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/avatar"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_width="64dp"
+        android:layout_height="64dp"/>
+
+    <TextView
+        android:id="@+id/name"
+        android:text="Sunday Efeh"
+        android:layout_marginLeft="@dimen/vertical_margin"
+        android:layout_marginStart="@dimen/vertical_margin"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@id/avatar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:id="@+id/country"
+        android:text="Country"
+        android:layout_marginLeft="@dimen/vertical_margin"
+        android:layout_marginStart="@dimen/vertical_margin"
+        app:layout_constraintTop_toBottomOf="@id/gender"
+        app:layout_constraintStart_toEndOf="@id/avatar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:id="@+id/color"
+        android:text="Color"
+        android:layout_marginLeft="@dimen/vertical_margin"
+        android:layout_marginStart="@dimen/vertical_margin"
+        app:layout_constraintTop_toBottomOf="@id/country"
+        app:layout_constraintStart_toEndOf="@id/avatar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:id="@+id/gender"
+        android:text="@string/gender_label"
+        android:layout_marginLeft="@dimen/vertical_margin"
+        android:layout_marginStart="@dimen/vertical_margin"
+        app:layout_constraintTop_toBottomOf="@id/name"
+        app:layout_constraintStart_toEndOf="@id/avatar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

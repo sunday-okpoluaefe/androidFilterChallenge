@@ -21,6 +21,21 @@ allprojects {
     }
 }
 
+ext {
+    // App dependencies
+    retrofitVersion = '2.6.1'
+    rxJavaVersion = '2.1.1'
+    rxAndroidVersion = '2.1.1'
+    roomRxJavaVersion = '1.1.1'
+    gsonVersion = '2.8.5'
+    loggingInterceptorVersion = '3.14.2'
+    lifecycleVersion = '2.2.0'
+
+    daggerVersion = '2.24'
+    glideVersion = '4.9.0'
+    dexterVersion ='5.0.0'
+}
+
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
