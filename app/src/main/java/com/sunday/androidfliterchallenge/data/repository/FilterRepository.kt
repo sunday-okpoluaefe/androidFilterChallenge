@@ -13,5 +13,6 @@ interface FilterRepository {
     fun getCarOwners(filter: Filter)
     fun carOwnersObserver() : LiveData<ArrayList<CarOwner>>
 
+
     fun clear()
 }

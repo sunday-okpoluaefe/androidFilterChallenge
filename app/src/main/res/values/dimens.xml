@@ -6,4 +6,5 @@
     <dimen name="avatar_width">64dp</dimen>
     <dimen name="large_text_size">24sp</dimen>
     <dimen name="small_space">5dp</dimen>
+    <dimen name="small_text_size">14sp</dimen>
 </resources>
