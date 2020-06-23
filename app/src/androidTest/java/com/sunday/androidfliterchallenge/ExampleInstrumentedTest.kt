@@ -2,6 +2,7 @@ package com.sunday.androidfliterchallenge
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.sunday.androidfliterchallenge.data.entity.Filter
 
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -21,4 +22,18 @@ class ExampleInstrumentedTest {
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
         assertEquals("com.sunday.androidfliterchallenge", appContext.packageName)
     }
+
+    @Test
+    fun testFilter(){
+        val filter = Filter()
+        filter.countries = listOf("China", "Nigeria", "Japan")
+        filter.colors = listOf("Black", "White", "Red")
+        filter.fullName = ""
+        filter.gender = "male"
+
+        val appContext = InstrumentationRegistry.getInstrumentation().targetContext
+
+    }
+
+
 }

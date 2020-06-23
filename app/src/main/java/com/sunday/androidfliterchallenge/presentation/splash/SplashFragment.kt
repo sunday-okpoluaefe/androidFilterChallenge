@@ -1,7 +1,7 @@
 package com.sunday.androidfliterchallenge.presentation.splash
 
+import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,11 +10,14 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.sunday.androidfliterchallenge.R
+import com.sunday.androidfliterchallenge.data.entity.CarOwner
+import com.sunday.androidfliterchallenge.data.entity.Filter
 import com.sunday.androidfliterchallenge.presentation.core.BaseFragment
 import com.sunday.androidfliterchallenge.presentation.core.ViewModelFactory
+import com.sunday.androidfliterchallenge.rx.Scheduler
 import com.sunday.androidfliterchallenge.utils.Status
+import io.reactivex.Observable
 import java.io.BufferedReader
-import java.io.InputStream
 import java.io.InputStreamReader
 import javax.inject.Inject
 
@@ -26,6 +29,11 @@ class SplashFragment : BaseFragment() {
     lateinit var bt_try_again : View
 
     @Inject
+    lateinit var scheduler : Scheduler
+
+    lateinit var carOwnersList : List<CarOwner>
+
+    @Inject
     lateinit var viewModelFactory : ViewModelFactory<SplashFragmentViewModel>
 
     private val splashFragmentViewModel : SplashFragmentViewModel by lazy {
@@ -35,26 +43,45 @@ class SplashFragment : BaseFragment() {
         }
     }
 
-    fun getCarOwnersFromAssets() : MutableList<Array<String>> {
+    private fun readCSV(): Observable<ArrayList<CarOwner>> {
+        val inputStream = resources.openRawResource(R.raw.car_ownsers_data)
 
-        val inputStream : InputStream? = activity?.assets?.open("car_ownsers_data.csv")
-        val isr = InputStreamReader(inputStream!!)
-        val br = BufferedReader(isr)
-        var line: String
-        val csvSplitBy = ","
+        BufferedReader(
+            InputStreamReader(inputStream, Charsets.UTF_8)
+        )
 
-        val rows: MutableList<Array<String>> = ArrayList()
+        //this is all the file in the csv as a string, you can just write this to external storage
+        val allText = inputStream.bufferedReader().use(BufferedReader::readText)
 
-        br.readLine()
+        val split = allText.split("\n")
 
-        while (br.readLine().also { line = it } != null) {
-            val row = line.split(csvSplitBy.toRegex()).toTypedArray()
-            rows.add(row)
+        //the first row is the heading, so I split that off
+        val heading = split.first()
+
+        val carOwners = ArrayList<CarOwner>()
+        for(data in split.subList(1, split.size)){
+            val row = data.split(',')
+            try{
+                carOwners.add(CarOwner().apply {
+                    firstName = row[1]
+                    lastName  = row[2]
+                    email  = row[3]
+                    country  = row[4]
+                    carModel  = row[5]
+                    carModelYear  = row[6]
+                    carColor  = row[7]
+                    gender  = row[8]
+                    jobTitle  = row[9]
+                    bio   = row[10]
+                })
+            }catch (e: Exception){
+
+            }
         }
-       // Log.d("COUNTER", rows.size.toString())
-        return rows
 
+        return Observable.just(carOwners)
     }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -64,6 +91,7 @@ class SplashFragment : BaseFragment() {
         return inflater.inflate(R.layout.splash_layout, container, false)
     }
 
+    @SuppressLint("CheckResult")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -77,8 +105,8 @@ class SplashFragment : BaseFragment() {
             splashFragmentViewModel.getFilters()
         }
 
-        splashFragmentViewModel.filtersObserver().observe(viewLifecycleOwner, Observer {
-            when (it.status){
+        splashFragmentViewModel.filtersObserver().observe(viewLifecycleOwner, Observer { result ->
+            when (result.status){
                 Status.LOADING ->   {
                     error_layout.visibility = View.GONE
                     progress_indicator.visibility = View.VISIBLE
@@ -89,12 +117,33 @@ class SplashFragment : BaseFragment() {
                 }
                 Status.SUCCESS -> {
 
-                    findNavController().navigate(R.id.action_splashFragment_to_FirstFragment,
-                        bundleOf("filters" to it.data))
+                    processData(result.data!!)
+
                 }
             }
         })
 
         splashFragmentViewModel.getFilters()
     }
+
+    @SuppressLint("CheckResult")
+    fun processData(filters: ArrayList<Filter>){
+        readCSV().subscribeOn(scheduler.background())
+            .observeOn(scheduler.ui())
+            .subscribe(
+                {
+                    //Log.d(TAG, "Reading done: ${it.size}")
+                    carOwnersList = it
+
+
+                    findNavController().navigate(R.id.action_splashFragment_to_FirstFragment,
+                        bundleOf("filters" to filters, "owners" to carOwnersList))
+
+                },
+                {
+                    //Log.e(TAG, "Error occurred: ${it.localizedMessage}", it)
+                }
+            )
+    }
+
 }

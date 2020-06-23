@@ -8,7 +8,6 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:paddingTop="@dimen/vertical_margin"
-        android:paddingBottom="@dimen/vertical_margin"
         android:id="@+id/list"
         android:background="#F0F0F0"
         android:layout_width="match_parent"

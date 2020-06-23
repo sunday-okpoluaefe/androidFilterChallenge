@@ -12,11 +12,13 @@
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="gender_label">Gender</string>
     <string name="network_error_text">There was an error connecting to the internet. kindly try again</string>
-    <string name="try_again_text">Try again</string>
+    <string name="try_again_text">Retry</string>
     <string name="filter_fragment_title">My Filters</string>
     <string name="filter_result_fragment_title">Car Owners</string>
     <string name="default_name">Sunday Okpoluaefe</string>
     <string name="default_country">Nigeria, China, India</string>
     <string name="default_gender">Female</string>
     <string name="default_color">Red</string>
+    <string name="default_email">Sunday@test.com</string>
+    <string name="default_bio">I am a  self taught software engineer. I have worked several software companies created awessome solutions to societal problems</string>
 </resources>

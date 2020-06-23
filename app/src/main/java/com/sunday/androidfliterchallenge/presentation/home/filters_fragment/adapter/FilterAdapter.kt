@@ -13,11 +13,6 @@ class FilterAdapter (
 ) :
     RecyclerView.Adapter<FilterViewHolder>() {
 
-    fun update(filters:  List<Filter>, user: String){
-        this.filters = filters
-        notifyDataSetChanged()
-    }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FilterViewHolder {
         val view: View = LayoutInflater.from(parent.context)
             .inflate(R.layout.filter_row_item, parent, false)
