@@ -16,9 +16,6 @@ import com.sunday.androidfliterchallenge.presentation.core.BaseFragment
 import com.sunday.androidfliterchallenge.presentation.core.ViewModelFactory
 import com.sunday.androidfliterchallenge.rx.Scheduler
 import com.sunday.androidfliterchallenge.utils.Status
-import io.reactivex.Observable
-import java.io.BufferedReader
-import java.io.InputStreamReader
 import javax.inject.Inject
 
 
@@ -31,7 +28,7 @@ class SplashFragment : BaseFragment() {
     @Inject
     lateinit var scheduler : Scheduler
 
-    lateinit var carOwnersList : List<CarOwner>
+    lateinit var filters : ArrayList<Filter>
 
     @Inject
     lateinit var viewModelFactory : ViewModelFactory<SplashFragmentViewModel>
@@ -41,45 +38,6 @@ class SplashFragment : BaseFragment() {
             ViewModelProvider(this, viewModelFactory)
                 .get(SplashFragmentViewModel::class.java)
         }
-    }
-
-    private fun readCSV(): Observable<ArrayList<CarOwner>> {
-        val inputStream = resources.openRawResource(R.raw.car_ownsers_data)
-
-        BufferedReader(
-            InputStreamReader(inputStream, Charsets.UTF_8)
-        )
-
-        //this is all the file in the csv as a string, you can just write this to external storage
-        val allText = inputStream.bufferedReader().use(BufferedReader::readText)
-
-        val split = allText.split("\n")
-
-        //the first row is the heading, so I split that off
-        val heading = split.first()
-
-        val carOwners = ArrayList<CarOwner>()
-        for(data in split.subList(1, split.size)){
-            val row = data.split(',')
-            try{
-                carOwners.add(CarOwner().apply {
-                    firstName = row[1]
-                    lastName  = row[2]
-                    email  = row[3]
-                    country  = row[4]
-                    carModel  = row[5]
-                    carModelYear  = row[6]
-                    carColor  = row[7]
-                    gender  = row[8]
-                    jobTitle  = row[9]
-                    bio   = row[10]
-                })
-            }catch (e: Exception){
-
-            }
-        }
-
-        return Observable.just(carOwners)
     }
 
 
@@ -105,6 +63,25 @@ class SplashFragment : BaseFragment() {
             splashFragmentViewModel.getFilters()
         }
 
+        //
+        splashFragmentViewModel.carOwnersObserver().observe(viewLifecycleOwner, Observer {result ->
+            when (result.status){
+                Status.LOADING ->   {
+
+                }
+                Status.ERROR -> {
+
+                }
+                Status.SUCCESS -> {
+
+                    // processData(result.data!!)
+                    findNavController().navigate(R.id.action_splashFragment_to_FirstFragment,
+                        bundleOf("filters" to filters, "owners" to result.data))
+
+                }
+            }
+        })
+
         splashFragmentViewModel.filtersObserver().observe(viewLifecycleOwner, Observer { result ->
             when (result.status){
                 Status.LOADING ->   {
@@ -117,7 +94,9 @@ class SplashFragment : BaseFragment() {
                 }
                 Status.SUCCESS -> {
 
-                    processData(result.data!!)
+                   // processData(result.data!!)
+                    filters = result?.data!!
+                    splashFragmentViewModel.getCarOwners(requireContext())
 
                 }
             }
@@ -126,24 +105,6 @@ class SplashFragment : BaseFragment() {
         splashFragmentViewModel.getFilters()
     }
 
-    @SuppressLint("CheckResult")
-    fun processData(filters: ArrayList<Filter>){
-        readCSV().subscribeOn(scheduler.background())
-            .observeOn(scheduler.ui())
-            .subscribe(
-                {
-                    //Log.d(TAG, "Reading done: ${it.size}")
-                    carOwnersList = it
 
-
-                    findNavController().navigate(R.id.action_splashFragment_to_FirstFragment,
-                        bundleOf("filters" to filters, "owners" to carOwnersList))
-
-                },
-                {
-                    //Log.e(TAG, "Error occurred: ${it.localizedMessage}", it)
-                }
-            )
-    }
 
 }
