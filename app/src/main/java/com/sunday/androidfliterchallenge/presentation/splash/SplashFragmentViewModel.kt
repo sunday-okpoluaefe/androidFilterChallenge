@@ -1,5 +1,6 @@
 package com.sunday.androidfliterchallenge.presentation.splash
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import com.sunday.androidfliterchallenge.data.entity.Filter
 import com.sunday.androidfliterchallenge.data.repository.FilterRepository
@@ -11,9 +12,9 @@ class SplashFragmentViewModel @Inject constructor(val filterRepository: FilterRe
     fun getFilters() = filterRepository.getFilters()
     fun filtersObserver() = filterRepository.filtersObserver()
 
-    fun getCarOwners(filter: Filter){
+    fun getCarOwners(context: Context) = filterRepository.getCarOwners(context)
 
-    }
+    fun carOwnersObserver() = filterRepository.carOwnersObserver()
 
     override fun onCleared() {
         super.onCleared()
